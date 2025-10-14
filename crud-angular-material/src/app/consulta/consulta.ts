@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
 import { Cliente } from '../cadastro/cliente';
 import { Clientes } from '../clientes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-consulta',
@@ -26,13 +27,23 @@ import { Clientes } from '../clientes';
   styleUrl: './consulta.scss'
 })
 export class Consulta {
-  colunasTabela: string[] = ["id", "nome", "cpf", "dataNascimento", "email"];
+  colunasTabela: string[] = ["id", "nome", "cpf", "dataNascimento", "email", "acoes"];
   listaClientes: Cliente[] = [];
   nome: string = '';
 
-  constructor(private service: Clientes) { }
+  constructor(private service: Clientes, private router: Router) { }
 
   ngOnInit() {
     this.listaClientes = this.service.pesquisarClientes(this.nome);
+    console.log(this.listaClientes);
+  }
+
+  pesquisar(){
+    this.listaClientes = this.service.pesquisarClientes(this.nome);
+    console.log(this.listaClientes);
+  }
+
+  prepararParaEditar(id: string){
+    this.router.navigate([`/cadastro`], { queryParams: { "id": id} });
   }
 }

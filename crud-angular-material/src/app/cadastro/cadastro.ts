@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
@@ -23,12 +25,33 @@ import { Clientes } from '../clientes';
   templateUrl: './cadastro.html',
   styleUrl: './cadastro.scss'
 })
-export class Cadastro {
+export class Cadastro implements OnInit{
+  atualizando: boolean = false;
   cliente: Cliente = Cliente.newCliente();
 
-  constructor(private service: Clientes){}
+  constructor(private service: Clientes, private route: ActivatedRoute, private router: Router) { }
 
   salvar(){
-    this.service.salvar(this.cliente);
+    if(!this.atualizando){
+      this.service.salvar(this.cliente);
+      this.cliente = Cliente.newCliente();
+    } else {
+      this.service.atualizar(this.cliente);
+      this.router.navigate(['/consulta']);
+    }
+  }
+
+  ngOnInit(){
+    this.route.queryParamMap.subscribe( (query: any) => {
+      const params = query['params'];
+      const id = params['id'];
+      if(id){
+        let clienteEncontrado = this.service.buscarClientePorId(id);
+        if(clienteEncontrado){
+          this.atualizando = true;
+          this.cliente = clienteEncontrado;
+        }
+      }
+    })
   }
 }

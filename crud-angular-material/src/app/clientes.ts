@@ -26,6 +26,31 @@ export class Clientes {
   }
 
   pesquisarClientes(nome: string): Cliente[] {
-    return this.obterStorage();
+    let resultado = this.obterStorage();
+
+    if(!nome){
+      return resultado;
+    }
+
+    return resultado.filter(cliente => cliente.nome?.indexOf(nome) !== -1);
+  }
+
+  buscarClientePorId(id: string) {
+    let clientes = localStorage.getItem(Clientes.STORAGE_KEY);
+    if (clientes) {
+      let arr: Cliente[] = JSON.parse(clientes);
+      return arr.find(cliente => cliente.id === id);
+    }
+    return undefined;
+  }
+
+  atualizar(cliente: Cliente){
+    let storage = this.obterStorage();
+    for(let index = 0; index < storage.length; index++) {
+      if(storage[index].id === cliente.id){
+        storage[index] = cliente;
+        localStorage.setItem(Clientes.STORAGE_KEY, JSON.stringify(storage));
+      }
+    }
   }
 }
