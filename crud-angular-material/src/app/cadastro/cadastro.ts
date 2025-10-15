@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { Cliente } from './cliente';
 import { Clientes } from '../clientes';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -22,7 +23,8 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     FormsModule,
     MatIcon,
     MatButton,
-    NgxMaskDirective
+    NgxMaskDirective,
+    MatSnackBarModule
   ],
   providers: [
     provideNgxMask()
@@ -33,6 +35,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 export class Cadastro implements OnInit{
   atualizando: boolean = false;
   cliente: Cliente = Cliente.newCliente();
+  snack: MatSnackBar = inject(MatSnackBar);
 
   constructor(private service: Clientes, private route: ActivatedRoute, private router: Router) { }
 
@@ -40,9 +43,12 @@ export class Cadastro implements OnInit{
     if(!this.atualizando){
       this.service.salvar(this.cliente);
       this.cliente = Cliente.newCliente();
+      this.snack.open('Cliente salvo com sucesso!','OK');
     } else {
       this.service.atualizar(this.cliente);
       this.router.navigate(['/consulta']);
+      this.snack.open('Cliente atualizado com sucesso!','OK');
+
     }
   }
 
