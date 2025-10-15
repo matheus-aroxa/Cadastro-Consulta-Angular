@@ -53,4 +53,14 @@ export class Clientes {
       }
     }
   }
+
+  deletar(id: string){
+    let storage = this.obterStorage();
+    for(let index = 0; index < storage.length; index++) {
+      if(storage[index].id === id){
+        storage.splice(index, 1);
+        localStorage.setItem(Clientes.STORAGE_KEY, JSON.stringify(storage));
+      }
+    }
+  }
 }

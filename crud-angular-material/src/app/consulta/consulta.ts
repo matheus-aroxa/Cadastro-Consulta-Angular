@@ -35,15 +35,22 @@ export class Consulta {
 
   ngOnInit() {
     this.listaClientes = this.service.pesquisarClientes(this.nome);
-    console.log(this.listaClientes);
   }
 
   pesquisar(){
     this.listaClientes = this.service.pesquisarClientes(this.nome);
-    console.log(this.listaClientes);
   }
 
   prepararParaEditar(id: string){
     this.router.navigate([`/cadastro`], { queryParams: { "id": id} });
+  }
+
+  prepararParaDeletar(cliente: Cliente){
+    cliente.deletando = true;
+  }
+
+  confirmarDelecao(id: string){
+    this.service.deletar(id);
+    this.listaClientes = this.service.pesquisarClientes(this.nome);
   }
 }

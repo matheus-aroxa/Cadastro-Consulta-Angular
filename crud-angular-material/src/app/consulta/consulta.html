@@ -61,6 +61,18 @@
               <mat-icon fontIcon="edit"></mat-icon>
                 Editar
               </button>
+              @if (!cliente.deletando) {
+                <button mat-button (click)="prepararParaDeletar(cliente)">
+                  <mat-icon fontIcon="delete"></mat-icon>
+                  Deletar
+                </button>
+              } @else {
+                <button mat-button (click)="confirmarDelecao(cliente.id)">
+                  <mat-icon fontIcon="question_mark"></mat-icon>
+                  Confirmar
+                </button>
+              }
+
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="colunasTabela"></tr>
