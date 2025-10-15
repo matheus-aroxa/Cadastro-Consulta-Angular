@@ -10,6 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { Cliente } from './cliente';
 import { Clientes } from '../clientes';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-cadastro',
@@ -20,7 +21,11 @@ import { Clientes } from '../clientes';
     MatInputModule,
     FormsModule,
     MatIcon,
-    MatButton
+    MatButton,
+    NgxMaskDirective
+  ],
+  providers: [
+    provideNgxMask()
   ],
   templateUrl: './cadastro.html',
   styleUrl: './cadastro.scss'
