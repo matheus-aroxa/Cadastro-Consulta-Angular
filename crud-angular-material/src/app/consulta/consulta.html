@@ -54,6 +54,14 @@
             <th mat-header-cell *matHeaderCellDef>Email</th>
             <td mat-cell *matCellDef="let cliente">{{cliente.email}}</td>
           </ng-container>
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let cliente">{{cliente.estado}}</td>
+          </ng-container>
+          <ng-container matColumnDef="cidade">
+            <th mat-header-cell *matHeaderCellDef>Município</th>
+            <td mat-cell *matCellDef="let cliente">{{cliente.cidade}}</td>
+          </ng-container>
           <ng-container matColumnDef="acoes">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let cliente">
@@ -72,7 +80,6 @@
                   Confirmar
                 </button>
               }
-
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="colunasTabela"></tr>

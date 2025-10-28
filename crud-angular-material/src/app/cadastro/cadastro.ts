@@ -12,6 +12,10 @@ import { MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { Cliente } from './cliente';
 import { Clientes } from '../clientes';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import {MatSelectChange, MatSelectModule} from '@angular/material/select';
+import {Estado} from '../estado';
+import {BrasilApi} from '../brasil-api';
+import {Municipio} from '../municipio';
 
 @Component({
   selector: 'app-cadastro',
@@ -24,7 +28,8 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     MatIcon,
     MatButton,
     NgxMaskDirective,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule
   ],
   providers: [
     provideNgxMask()
@@ -36,8 +41,10 @@ export class Cadastro implements OnInit{
   atualizando: boolean = false;
   cliente: Cliente = Cliente.newCliente();
   snack: MatSnackBar = inject(MatSnackBar);
+  estados: Estado[] = [];
+  cidades: Municipio[] = [];
 
-  constructor(private service: Clientes, private route: ActivatedRoute, private router: Router) { }
+  constructor(private service: Clientes, private route: ActivatedRoute, private router: Router, private api: BrasilApi) { }
 
   salvar(){
     if(!this.atualizando){
@@ -64,5 +71,18 @@ export class Cadastro implements OnInit{
         }
       }
     })
+
+    this.api.findAll().subscribe({
+      next: (response) => { this.estados = response },
+      error: (err) => { console.error(err) }
+    })
+  }
+
+  selectionEstado(event: MatSelectChange){
+    this.service.selectionEstado(event).subscribe({
+      next: (response) => {this.cidades = response},
+      error: (err) => console.error(err)
+    });
+
   }
 }

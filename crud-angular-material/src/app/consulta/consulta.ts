@@ -29,7 +29,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   styleUrl: './consulta.scss'
 })
 export class Consulta {
-  colunasTabela: string[] = ["id", "nome", "cpf", "dataNascimento", "email", "acoes"];
+  colunasTabela: string[] = ["id", "nome", "cpf", "dataNascimento", "email", "estado", "cidade", "acoes"];
   listaClientes: Cliente[] = [];
   nome: string = '';
   snack: MatSnackBar = inject(MatSnackBar);

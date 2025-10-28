@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Cliente } from './cadastro/cliente';
+import {BrasilApi} from './brasil-api';
+import {MatSelectChange} from '@angular/material/select';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +9,9 @@ import { Cliente } from './cadastro/cliente';
 export class Clientes {
 
   static STORAGE_KEY = 'REPO_CLIENTES';
+
+  constructor(private api: BrasilApi) {
+  }
 
   salvar(cliente: Cliente){
     let clientes = this.obterStorage();
@@ -63,4 +68,9 @@ export class Clientes {
       }
     }
   }
+
+  selectionEstado(event: MatSelectChange)  {
+    return this.api.findAllMunicipios(event.value);
+  }
+
 }
