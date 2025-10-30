@@ -59,6 +59,12 @@ export class Cadastro implements OnInit{
     }
   }
 
+  clear(){
+    let id = this.cliente.id;
+    this.cliente = new Cliente();
+    this.cliente.id = id;
+  }
+
   ngOnInit(){
     this.route.queryParamMap.subscribe( (query: any) => {
       const params = query['params'];
