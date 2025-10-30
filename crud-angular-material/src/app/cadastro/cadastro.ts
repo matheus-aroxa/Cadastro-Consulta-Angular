@@ -78,10 +78,18 @@ export class Cadastro implements OnInit{
       }
     })
 
+
     this.api.findAll().subscribe({
       next: (response) => { this.estados = response },
       error: (err) => { console.error(err) }
     })
+
+    if(this.cliente.estado) {
+      this.api.findAllMunicipios(this.cliente.estado).subscribe({
+        next: (response) => { this.cidades = response },
+        error: (err) => { console.error(err) }
+      })
+    }
   }
 
   selectionEstado(event: MatSelectChange){
@@ -89,6 +97,5 @@ export class Cadastro implements OnInit{
       next: (response) => {this.cidades = response},
       error: (err) => console.error(err)
     });
-
   }
 }
