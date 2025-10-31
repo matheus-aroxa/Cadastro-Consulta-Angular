@@ -80,31 +80,31 @@ export class Cadastro implements OnInit{
         if(clienteEncontrado){
           this.atualizando = true;
           this.cliente = clienteEncontrado;
-
-          this.api.findAll().subscribe({
-            next: (response) => {
-              this.estados = response
-
-              if(this.cliente.estado) {
-                this.api.findAllMunicipios(this.cliente.estado).subscribe({
-                  next: (response) => {
-                    this.cidades = response
-                    this.cdr.detectChanges();
-                  },
-                  error: (err) => {
-                    console.error(err);
-                    this.cdr.detectChanges();
-                  }
-                })
-              }
-            },
-            error: (err) => {
-              console.error(err);
-              this.cdr.detectChanges();
-            }
-          })
         }
       }
+
+      this.api.findAll().subscribe({
+        next: (response) => {
+          this.estados = response
+
+          if(this.cliente.estado) {
+            this.api.findAllMunicipios(this.cliente.estado).subscribe({
+              next: (response) => {
+                this.cidades = response
+                this.cdr.detectChanges();
+              },
+              error: (err) => {
+                console.error(err);
+                this.cdr.detectChanges();
+              }
+            })
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.cdr.detectChanges();
+        }
+      })
     })
 
 
