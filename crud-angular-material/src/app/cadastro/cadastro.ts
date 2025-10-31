@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -12,10 +12,10 @@ import { MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { Cliente } from './cliente';
 import { Clientes } from '../clientes';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import {MatSelectChange, MatSelectModule} from '@angular/material/select';
-import {Estado} from '../estado';
-import {BrasilApi} from '../brasil-api';
-import {Municipio} from '../municipio';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { Estado } from '../estado';
+import { BrasilApi } from '../brasil-api';
+import { Municipio } from '../municipio';
 
 @Component({
   selector: 'app-cadastro',
@@ -44,7 +44,13 @@ export class Cadastro implements OnInit{
   estados: Estado[] = [];
   cidades: Municipio[] = [];
 
-  constructor(private service: Clientes, private route: ActivatedRoute, private router: Router, private api: BrasilApi) { }
+  constructor(
+    private service: Clientes,
+    private route: ActivatedRoute,
+    private router: Router,
+    private api: BrasilApi,
+    private cdr: ChangeDetectorRef
+    ) { }
 
   salvar(){
     if(!this.atualizando){
@@ -74,22 +80,35 @@ export class Cadastro implements OnInit{
         if(clienteEncontrado){
           this.atualizando = true;
           this.cliente = clienteEncontrado;
+
+          this.api.findAll().subscribe({
+            next: (response) => {
+              this.estados = response
+
+              if(this.cliente.estado) {
+                this.api.findAllMunicipios(this.cliente.estado).subscribe({
+                  next: (response) => {
+                    this.cidades = response
+                    this.cdr.detectChanges();
+                  },
+                  error: (err) => {
+                    console.error(err);
+                    this.cdr.detectChanges();
+                  }
+                })
+              }
+            },
+            error: (err) => {
+              console.error(err);
+              this.cdr.detectChanges();
+            }
+          })
         }
       }
     })
 
 
-    this.api.findAll().subscribe({
-      next: (response) => { this.estados = response },
-      error: (err) => { console.error(err) }
-    })
 
-    if(this.cliente.estado) {
-      this.api.findAllMunicipios(this.cliente.estado).subscribe({
-        next: (response) => { this.cidades = response },
-        error: (err) => { console.error(err) }
-      })
-    }
   }
 
   selectionEstado(event: MatSelectChange){
